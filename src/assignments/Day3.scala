@@ -4,25 +4,25 @@ import scala.annotation.tailrec
 
 object Day3_1 {
 
-  private val RIGHT_COUNT = 3
+  private val AMOUNT_OF_STEPS_RIGHT = 3
   private val TREE = '#'
 
   def printAnswer(input: Seq[String]): Unit = println(countTrees(input.toList))
 
-  private def countTrees(input: List[String], index: Int = 0, stepsRight: Int = 0, check: Boolean = false): Int = check match {
-    case true => getLine(input, index) match {
+  private def countTrees(input: List[String], current: Int = 0, stepsTaken: Int = 0, shouldCheckLine: Boolean = false): Int = shouldCheckLine match {
+    case true => getLine(input, current) match {
       case null => 0
-      case line if hasTree(line.toList, line.length, stepsRight) => 1 + countTrees(input, index, stepsRight)
-      case _ => countTrees(input, index, stepsRight)
+      case line if hasTree(line.toList, line.length, stepsTaken) => 1 + countTrees(input, current, stepsTaken)
+      case _ => countTrees(input, current, stepsTaken)
     }
-    case false => countTrees(input, index + 1, stepsRight + RIGHT_COUNT, check = true)
+    case false => countTrees(input, current + 1, stepsTaken + AMOUNT_OF_STEPS_RIGHT, shouldCheckLine = true)
   }
 
   @tailrec
-  private def getLine(input: List[String], index: Int, count: Int = 0): String = input match {
+  private def getLine(input: List[String], index: Int, current: Int = 0): String = input match {
     case Nil => null
-    case head :: _ if count == index => head
-    case _ :: tail => getLine(tail, index, count + 1)
+    case head :: _ if current == index => head
+    case _ :: tail => getLine(tail, index, current + 1)
   }
 
   @tailrec
