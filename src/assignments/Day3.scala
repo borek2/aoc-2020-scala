@@ -2,20 +2,35 @@ package assignments
 
 import scala.annotation.tailrec
 
-object Day3_1 {
+object Day3 {
 
-  private val AMOUNT_OF_STEPS_RIGHT = 3
+  class Slope(val right: Int, val down: Int)
+
+  private val answer2Slopes = List(
+    new Slope(1, 1),
+    new Slope(3, 1),
+    new Slope(5, 1),
+    new Slope(7, 1),
+    new Slope(1, 2)
+  )
+
   private val TREE = '#'
 
-  def printAnswer(input: Seq[String]): Unit = println(countTrees(input.toList))
+  def printAnswer1(input: Seq[String]): Unit = println(
+    countTrees(input.toList, slope = new Slope(3, 1))
+  )
 
-  private def countTrees(input: List[String], current: Int = 0, stepsTaken: Int = 0, shouldCheckLine: Boolean = false): Int = shouldCheckLine match {
+  def printAnswer2(input: Seq[String]): Unit = println(
+    answer2Slopes.foldLeft(1L)((mult, slope) => mult * countTrees(input.toList, slope = slope))
+  )
+
+  private def countTrees(input: List[String], current: Int = 0, stepsTaken: Int = 0, shouldCheckLine: Boolean = false, slope: Slope): Int = shouldCheckLine match {
     case true => getLine(input, current) match {
       case null => 0
-      case line if hasTree(line.toList, line.length, stepsTaken) => 1 + countTrees(input, current, stepsTaken)
-      case _ => countTrees(input, current, stepsTaken)
+      case line if hasTree(line.toList, line.length, stepsTaken) => 1 + countTrees(input, current, stepsTaken, slope = slope)
+      case _ => countTrees(input, current, stepsTaken, slope = slope)
     }
-    case false => countTrees(input, current + 1, stepsTaken + AMOUNT_OF_STEPS_RIGHT, shouldCheckLine = true)
+    case false => countTrees(input, current + slope.down, stepsTaken + slope.right, shouldCheckLine = true, slope = slope)
   }
 
   @tailrec

@@ -1,13 +1,17 @@
-import assignments.Day3_1
+import assignments.Day3
 
 object Main {
   def main(args: Array[String]): Unit = {
     val testSource = scala.io.Source.fromFile("src/resources/Day3Test")
-    Day3_1.printAnswer(testSource.getLines().toSeq)
+    val testLines = testSource.getLines().toSeq
+    Day3.printAnswer1(testLines)
+    Day3.printAnswer2(testLines)
     testSource.close()
-//
-//    val source = scala.io.Source.fromFile("src/resources/Day3")
-//    Day3.printAnswers(testSource.getLines().toSeq)
-//    testSource.close()
+
+    val source = scala.io.Source.fromFile("src/resources/Day3")
+    val lines = source.getLines().toSeq
+    Day3.printAnswer1(lines)
+    Day3.printAnswer2(lines)
+    testSource.close()
   }
 }
