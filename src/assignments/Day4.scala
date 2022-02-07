@@ -1,5 +1,7 @@
 package assignments
 
+import scala.annotation.tailrec
+
 /**
  * byr (Birth Year)
  * iyr (Issue Year)
@@ -19,13 +21,12 @@ object Day4 {
   def printAnswer1(input: Seq[String]): Unit = println(countPasswordEntries(input.toList))
 
   def countPasswordEntries(input: List[String], neededEntries: List[String] = neededEntries): Int = input match {
-    case Nil => 0
-    case line :: "" :: rest if findPasswordEntries(line.toList, neededEntries).isEmpty => 1 + countPasswordEntries(rest, Day4.neededEntries)
-    case line :: Nil => if (findPasswordEntries(line.toList, neededEntries).isEmpty) 1 else 0
-    case line :: "" :: rest if findPasswordEntries(line.toList, neededEntries).nonEmpty => countPasswordEntries(rest, Day4.neededEntries)
+    case Nil => if (neededEntries.isEmpty) 1 else 0
+    case "" :: rest => if (neededEntries.isEmpty) 1 + countPasswordEntries(rest, Day4.neededEntries) else countPasswordEntries(rest, Day4.neededEntries)
     case line :: rest => countPasswordEntries(rest, findPasswordEntries(line.toList, neededEntries))
   }
 
+  @tailrec
   def findPasswordEntries(line: List[Char], neededEntries: List[String] = neededEntries): List[String] = line match {
     case Nil => neededEntries
     case char1 :: char2 :: char3 :: ':' :: rest =>
