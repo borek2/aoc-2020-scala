@@ -33,9 +33,4 @@ object Day4 {
       findPasswordEntries(rest, neededEntries.filter(str => str != "".appended(char1).appended(char2).appended(char3)))
     case _ :: rest => findPasswordEntries(rest, neededEntries)
   }
-
-  def entry(line: List[Char]): String = line match {
-    case ':' :: _ => ""
-    case char :: rest => char + entry(rest)
-  }
 }
