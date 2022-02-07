@@ -20,7 +20,15 @@ object Day4 {
 
   def printAnswer1(input: Seq[String]): Unit = println(countValidPassports(input.toList))
 
+  def printAnswer2(input: Seq[String]): Unit = println(countValidPassports2(input.toList))
+
   def countValidPassports(input: List[String], neededEntries: List[String] = neededEntries): Int = input match {
+    case Nil => neededEntries.isEmpty.toInt
+    case "" :: rest => neededEntries.isEmpty.toInt + countValidPassports(rest, Day4.neededEntries)
+    case line :: rest => countValidPassports(rest, filterNeededEntries(line.toList, neededEntries))
+  }
+
+  def countValidPassports2(input: List[String], neededEntries: List[String] = neededEntries): Int = input match {
     case Nil => neededEntries.isEmpty.toInt
     case "" :: rest => neededEntries.isEmpty.toInt + countValidPassports(rest, Day4.neededEntries)
     case line :: rest => countValidPassports(rest, filterNeededEntries(line.toList, neededEntries))

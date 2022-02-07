@@ -2,9 +2,9 @@ import assignments.{Day4}
 
 object Main {
   def main(args: Array[String]): Unit = {
-    val testSource = scala.io.Source.fromFile("src/resources/Day4")
+    val testSource = scala.io.Source.fromFile("src/resources/Day4Test2")
     val testLines = testSource.getLines().toSeq
-    Day4.printAnswer1(testLines)
+    Day4.printAnswer2(testLines)
     testSource.close()
   }
 }
