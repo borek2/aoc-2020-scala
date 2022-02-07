@@ -18,19 +18,27 @@ object Day4 {
     "byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"
   )
 
-  def printAnswer1(input: Seq[String]): Unit = println(countPasswordEntries(input.toList))
+  def printAnswer1(input: Seq[String]): Unit = println(countValidPassports(input.toList))
 
-  def countPasswordEntries(input: List[String], neededEntries: List[String] = neededEntries): Int = input match {
-    case Nil => if (neededEntries.isEmpty) 1 else 0
-    case "" :: rest => if (neededEntries.isEmpty) 1 + countPasswordEntries(rest, Day4.neededEntries) else countPasswordEntries(rest, Day4.neededEntries)
-    case line :: rest => countPasswordEntries(rest, findPasswordEntries(line.toList, neededEntries))
+  def countValidPassports(input: List[String], neededEntries: List[String] = neededEntries): Int = input match {
+    case Nil => neededEntries.isEmpty.toInt
+    case "" :: rest => neededEntries.isEmpty.toInt + countValidPassports(rest, Day4.neededEntries)
+    case line :: rest => countValidPassports(rest, filterNeededEntries(line.toList, neededEntries))
   }
 
   @tailrec
-  def findPasswordEntries(line: List[Char], neededEntries: List[String] = neededEntries): List[String] = line match {
+  def filterNeededEntries(line: List[Char], neededEntries: List[String] = neededEntries): List[String] = line match {
     case Nil => neededEntries
     case char1 :: char2 :: char3 :: ':' :: rest =>
-      findPasswordEntries(rest, neededEntries.filter(str => str != "".appended(char1).appended(char2).appended(char3)))
-    case _ :: rest => findPasswordEntries(rest, neededEntries)
+      filterNeededEntries(rest, neededEntries.filter(str => str != (char1 :: char2 :: char3 :: Nil).stringify))
+    case _ :: rest => filterNeededEntries(rest, neededEntries)
+  }
+
+  implicit class asInt(b: Boolean) {
+    def toInt: Int = if (b) 1 else 0
+  }
+
+  implicit class asString(chars: List[Char]) {
+    def stringify: String = chars.foldLeft("") { (a, b) => a.appended(b) }
   }
 }
