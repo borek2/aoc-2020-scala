@@ -75,26 +75,26 @@ object Day4 {
     }
 
     private def are4DigitsBetween(low: Int, high: Int, chars: List[Char]): Boolean = chars match {
-      case char1 :: char2 :: char3 :: char4 :: tail if tail == Nil || tail.head == ' ' =>
+      case char1 :: char2 :: char3 :: char4 :: tail if tail.isEnd =>
         chars.take(4).forall(_.isDigit) && s"${char1}${char2}${char3}${char4}".toInt >= low && s"${char1}${char2}${char3}${char4}".toInt <= high
       case _ => false
     }
 
     private def isValidHgt(chars: List[Char], currentNumberString: String = ""): Boolean = chars match {
-      case 'i' :: 'n' :: tail if tail == Nil || tail.head == ' ' && currentNumberString.nonEmpty => currentNumberString.toInt >= 59 && currentNumberString.toInt <= 76
-      case 'c' :: 'm' :: tail if tail == Nil || tail.head == ' ' && currentNumberString.nonEmpty => currentNumberString.toInt >= 150 && currentNumberString.toInt <= 193
+      case 'i' :: 'n' :: tail if tail.isEnd && currentNumberString.nonEmpty => currentNumberString.toInt >= 59 && currentNumberString.toInt <= 76
+      case 'c' :: 'm' :: tail if tail.isEnd && currentNumberString.nonEmpty => currentNumberString.toInt >= 150 && currentNumberString.toInt <= 193
       case char :: rest if char.isDigit => isValidHgt(rest, s"$currentNumberString$char")
       case _ => false
     }
 
     private def isValidHcl(chars: List[Char]): Boolean = chars match {
-      case '#' :: char1 :: char2 :: char3 :: char4 :: char5 :: char6 :: tail if tail == Nil || tail.head == ' ' =>
+      case '#' :: char1 :: char2 :: char3 :: char4 :: char5 :: char6 :: tail if tail.isEnd =>
         s"$char1$char2$char3$char4$char5$char6".matches("[0-9a-z]+")
       case _ => false
     }
 
     private def isValidEcl(chars: List[Char]): Boolean = chars match {
-      case char1 :: char2 :: char3 :: tail if tail == Nil || tail.head == ' ' => s"$char1$char2$char3".matches("amb|blu|brn|gry|grn|hzl|oth")
+      case char1 :: char2 :: char3 :: tail if tail.isEnd => s"$char1$char2$char3".matches("amb|blu|brn|gry|grn|hzl|oth")
       case _ => false
     }
 
@@ -110,5 +110,9 @@ object Day4 {
 
   implicit class asString(chars: List[Char]) {
     def stringify: String = chars.foldLeft("") { (a, b) => a.appended(b) }
+  }
+
+  implicit class isEnd(chars: List[Char]) {
+    def isEnd: Boolean = chars == Nil || chars.head == ' '
   }
 }
